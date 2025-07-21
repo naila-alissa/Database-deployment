@@ -49,7 +49,6 @@ foreach ($folder in $folders) {
 --liquibase formatted sql
 --changeset ${user}:$changeSetId context:$context labels:$label
 --comment: $comment
---sql: Add SQL statements below this line
 "@
 
                 $existingContent = Get-Content $file.FullName | Out-String
