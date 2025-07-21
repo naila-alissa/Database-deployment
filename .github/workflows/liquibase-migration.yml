@@ -4,29 +4,23 @@ name: Liquibase Migration
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
- liquibase-update:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-       runs-on: windows-latest
+  liquibase-update:
+    runs-on: windows-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-     - name: Checkout code
+      - name: Checkout code
         uses: actions/checkout@v4
-  
+
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
@@ -46,6 +40,7 @@ jobs:
       - name: Format SQL files with PowerShell
         run: |
           pwsh ./script/format_liquibase_sql.ps1
+        shell: pwsh
 
       - name: Run Liquibase update
         env:
