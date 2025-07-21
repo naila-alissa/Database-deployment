@@ -1,0 +1,22 @@
+
+-- --liquibase formatted sql
+-- --changeset NAALI39:create-test-table
+-- CREATE TABLE test (
+--     id INT PRIMARY KEY,
+--     name VARCHAR(100),
+--     created_at DATETIME DEFAULT GETDATE()
+-- );
+
+-- --changeset NAALI39:column-to-test
+-- ALTER TABLE test ADD email VARCHAR(150);
+
+-- --changeset Niklas:003-insert-sample
+-- INSERT INTO test (id, name, email)
+-- VALUES (1, 'Ali', 'ali@example.com');
+-- --changeset Naila:1 context:insert-sample
+-- INSERT INTO test (id, name, email)
+-- VALUES (2, 'Laila', 'Laila@example.com');
+
+-- --changeset ${USERNAME}:insert-sample
+-- INSERT INTO test (id, name, email)
+-- VALUES (4, 'Sara', 'ali@example.com');
