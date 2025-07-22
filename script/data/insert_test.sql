@@ -1,2 +1,2 @@
 
-INSERT INTO test_table (id, name, email) VALUES (14, 'Susane', 'ali@example.com');
+INSERT INTO test_table (id, name, email) VALUES (13, 'Susane', 'ali@example.com');
