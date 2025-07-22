@@ -38,7 +38,6 @@ foreach ($folder in $folders) {
             # ONLY update files that do NOT already have a formatted sql block
             if ($firstLine -notlike '--liquibase formatted sql*') {
            
- 
                 $fileName = $file.Name
                 $changeSetId = "$globalId-$folder-$($file.BaseName)"
                 $context = "$folder-$globalId"
@@ -49,7 +48,6 @@ foreach ($folder in $folders) {
 --liquibase formatted sql
 --changeset ${user}:$changeSetId context:$context labels:$label
 --comment: $comment
---sql: Add SQL statements below this line
 "@
 
                 $existingContent = Get-Content $file.FullName | Out-String
