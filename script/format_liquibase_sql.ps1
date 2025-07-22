@@ -24,7 +24,17 @@
 
 $folders = @("schema", "view", "data")
 $user = $env:GITHUB_USER
-
+if ([string]::IsNullOrEmpty($user)) {
+    # Try to get the local git user name from git config
+    $gitUserName = git config user.name 2>$null
+    if ($gitUserName) {
+        $user = $gitUserName.Trim()
+    }
+    else {
+        # Fallback default username
+       $user = $env:USERNAME
+    }
+}
 
 foreach ($folder in $folders) {
     $folderPath = Join-Path $PSScriptRoot $folder
@@ -38,7 +48,6 @@ foreach ($folder in $folders) {
             # ONLY update files that do NOT already have a formatted sql block
             if ($firstLine -notlike '--liquibase formatted sql*') {
            
- 
                 $fileName = $file.Name
                 $changeSetId = "$globalId-$folder-$($file.BaseName)"
                 $context = "$folder-$globalId"
