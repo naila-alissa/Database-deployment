@@ -27,7 +27,7 @@ jobs:
 
       - name: Format SQL files with PowerShell
         env:
-          LIQUIBASE_COMMAND_USERNAME: ${{ secrets.LIQUIBASE_COMMAND_USERNAME }}
+          GITHUB_USER: ${{ github.actor }}
         run: |
           pwsh ./script/format_liquibase_sql.ps1
         shell: pwsh

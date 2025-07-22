@@ -23,7 +23,7 @@
 # # ...existing code...
 
 $folders = @("schema", "view", "data")
-$user = $env:LIQUIBASE_COMMAND_USERNAME
+$user = $env:GITHUB_USER
 
 
 foreach ($folder in $folders) {
