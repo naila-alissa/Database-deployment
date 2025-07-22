@@ -24,18 +24,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
-
-      - name: Download Liquibase
-        run: |
-          curl -L -o liquibase.zip https://github.com/liquibase/liquibase/releases/download/v4.32.0/liquibase-4.32.0.zip
-          powershell -Command "Expand-Archive -Path liquibase.zip -DestinationPath liquibase"
-          echo "$env:GITHUB_WORKSPACE\\liquibase" | Out-File -Append $env:GITHUB_PATH
-        shell: pwsh
-
-      - name: Download JDBC Driver
-        run: |
-          curl -L -o mssql-jdbc.jar https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/12.2.0.jre8/mssql-jdbc-12.2.0.jre8.jar
-
+          
       - name: Format SQL files with PowerShell
         run: |
           pwsh ./script/format_liquibase_sql.ps1
@@ -50,6 +39,19 @@ jobs:
           git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download Liquibase
+        run: |
+          curl -L -o liquibase.zip https://github.com/liquibase/liquibase/releases/download/v4.32.0/liquibase-4.32.0.zip
+          powershell -Command "Expand-Archive -Path liquibase.zip -DestinationPath liquibase"
+          echo "$env:GITHUB_WORKSPACE\\liquibase" | Out-File -Append $env:GITHUB_PATH
+        shell: pwsh
+
+      - name: Download JDBC Driver
+        run: |
+          curl -L -o mssql-jdbc.jar https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/12.2.0.jre8/mssql-jdbc-12.2.0.jre8.jar
+
+   
 
       - name: Run Liquibase Update
         env:
