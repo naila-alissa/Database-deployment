@@ -1,32 +1,20 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Liquibase Migration
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
- liquibase-update:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-       runs-on: windows-latest
+  liquibase-update:
+    runs-on: windows-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-     - name: Checkout code
+      - name: Checkout code
         uses: actions/checkout@v4
-  
+
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
@@ -36,21 +24,26 @@ jobs:
       - name: Download Liquibase
         run: |
           curl -L -o liquibase.zip https://github.com/liquibase/liquibase/releases/download/v4.32.0/liquibase-4.32.0.zip
-          tar -xf liquibase.zip
-          echo "$PWD/liquibase" | Out-File -Append $env:GITHUB_PATH
+          powershell -Command "Expand-Archive -Path liquibase.zip -DestinationPath liquibase"
+          echo "$env:GITHUB_WORKSPACE\\liquibase" | Out-File -Append $env:GITHUB_PATH
+        shell: pwsh
 
       - name: Download JDBC Driver
         run: |
-          curl -L -o mssql-jdbc-12.2.0.jre8.jar https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/12.2.0.jre8/mssql-jdbc-12.2.0.jre8.jar
+          curl -L -o mssql-jdbc.jar https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/12.2.0.jre8/mssql-jdbc-12.2.0.jre8.jar
 
       - name: Format SQL files with PowerShell
         run: |
           pwsh ./script/format_liquibase_sql.ps1
+        shell: pwsh
 
-      - name: Run Liquibase update
+      - name: Run Liquibase Update
         env:
+          env:
           LIQUIBASE_COMMAND_URL: ${{ secrets.LIQUIBASE_COMMAND_URL }}
           LIQUIBASE_COMMAND_USERNAME: ${{ secrets.LIQUIBASE_COMMAND_USERNAME }}
+          LIQUIBASE_COMMAND_PASSWORD: ${{ secrets.LIQUIBASE_COMMAND_PASSWORD }}
 
         run: |
-          liquibase --defaultsFile=liquibase.properties update
+          liquibase update
+        shell: pwsh
