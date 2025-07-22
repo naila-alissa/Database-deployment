@@ -36,6 +36,13 @@ jobs:
         run: |
           pwsh ./script/format_liquibase_sql.ps1
         shell: pwsh
+      - name: Commit formatted SQL files
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .
+          git commit -m "Format SQL files with Liquibase headers" || echo "No changes to commit"
+          git push
 
       - name: Run Liquibase Update
         env:
