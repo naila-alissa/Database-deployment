@@ -1,0 +1,1 @@
+ALTER TABLE test ADD country VARCHAR(250);
