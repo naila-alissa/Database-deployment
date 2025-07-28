@@ -67,7 +67,7 @@ jobs:
         uses: liquibase/liquibase-github-action@v7
         with:
           operation: update
-          changeLogFile: changelog.yaml  # غيّر هذا حسب اسم ملفك
+          changeLogFile: changelog.xml  # غيّر هذا حسب اسم ملفك
           url: ${{ secrets.LIQUIBASE_COMMAND_URL }}
           username:  ${{ secrets.LIQUIBASE_COMMAND_USERNAME }}
           password: ${{ secrets.LIQUIBASE_COMMAND_PASSWORD }}
@@ -76,7 +76,7 @@ jobs:
         uses: liquibase/liquibase-github-action@v7
         with:
           operation: validate
-          changeLogFile: changelog.yaml
+          changeLogFile: changelog.xml
           url: ${{ secrets.LIQUIBASE_COMMAND_URL }}
           username:  ${{ secrets.LIQUIBASE_COMMAND_USERNAME }}
           password: ${{ secrets.LIQUIBASE_COMMAND_PASSWORD }}
