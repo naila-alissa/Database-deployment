@@ -16,12 +16,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Set up Java
-      #   uses: actions/setup-java@v4
-      #   with:
-      #     distribution: 'temurin'
-      #     java-version: '21'
-
       - name: Format SQL files with PowerShell
         env:
           GITHUB_USER: ${{ github.actor }}
@@ -40,51 +34,10 @@ jobs:
           git add .
           git commit -m "chore: auto-format SQL files with Liquibase headers" || echo "No changes to commit"
           git push origin main
-        # env:
-        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Download Liquibase
-      #   run: |
-      #     curl -L -o liquibase.zip https://github.com/liquibase/liquibase/releases/download/v4.32.0/liquibase-4.32.0.zip
-      #     powershell -Command "Expand-Archive -Path liquibase.zip -DestinationPath liquibase"
-      #     echo "$env:GITHUB_WORKSPACE\\liquibase" | Out-File -Append $env:GITHUB_PATH
-      #   shell: pwsh
 
       - name: Download JDBC Driver
         run: |
           curl -L -o mssql-jdbc.jar https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/12.2.0.jre8/mssql-jdbc-12.2.0.jre8.jar
-
-   
-
-      # - name: Run Liquibase Update
-      #   env:
-      #     LIQUIBASE_COMMAND_URL: ${{ secrets.LIQUIBASE_COMMAND_URL }}
-      #     LIQUIBASE_COMMAND_USERNAME: ${{ secrets.LIQUIBASE_COMMAND_USERNAME }}
-      #     LIQUIBASE_COMMAND_PASSWORD: ${{ secrets.LIQUIBASE_COMMAND_PASSWORD }}
-      #   run: |
-      #     liquibase update
-      #   shell: pwsh
-
-
-      # - name: Set up Liquibase
-      #   uses: liquibase/liquibase-github-action@v7
-      #   with:
-      #     operation: update
-      #     changeLogFile: changelog.xml  
-      #     url: ${{ secrets.LIQUIBASE_COMMAND_URL }}
-      #     username:  ${{ secrets.LIQUIBASE_COMMAND_USERNAME }}
-      #     password: ${{ secrets.LIQUIBASE_COMMAND_PASSWORD }}
-      #     classpath: mssql-jdbc.jar
-
-      # - name: Validate changelog
-      #   uses: liquibase/liquibase-github-action@v7
-      #   with:
-      #     operation: validate
-      #     changeLogFile: changelog.xml
-      #     url: ${{ secrets.LIQUIBASE_COMMAND_URL }}
-      #     username:  ${{ secrets.LIQUIBASE_COMMAND_USERNAME }}
-      #     password: ${{ secrets.LIQUIBASE_COMMAND_PASSWORD }}
-      #     classpath: mssql-jdbc.jar
       
       - name: Run Liquibase Update SQL
         uses: liquibase-github-actions/update-sql@v4.32.0
@@ -96,11 +49,5 @@ jobs:
           password: ${{ secrets.LIQUIBASE_COMMAND_PASSWORD }}
           classpath: mssql-jdbc.jar
 
-      - name: Apply Liquibase Changes
-        uses: liquibase-github-actions/update@v4.32.0
-        with:
-          changeLogFile: changelog.yml  
-          url: ${{ secrets.LIQUIBASE_COMMAND_URL }}
-          username:  ${{ secrets.LIQUIBASE_COMMAND_USERNAME }}
-          password: ${{ secrets.LIQUIBASE_COMMAND_PASSWORD }}
-          classpath: mssql-jdbc.jar
+ 
+        
