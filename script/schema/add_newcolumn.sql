@@ -1,1 +1,1 @@
-ALTER TABLE test_table Provins VARCHAR(250);
+ALTER TABLE test_table ADD Provins VARCHAR(250);
