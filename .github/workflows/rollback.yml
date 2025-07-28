@@ -1,0 +1,35 @@
+name: Rollback to tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag from tagDatabase'
+        required: true
+        type: string
+
+jobs:
+  rollback-db:
+    name: "Rollback DB"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+     - uses: actions/checkout@v4
+     - uses: liquibase-github-actions/rollback-sql@v4.32.0
+       with:
+        changelogFile: "root-changelog.yaml"
+        tag: ${{ github.event.inputs.tag }}
+        url: ${{ secrets.LIQUIBASE_COMMAND_URL }}
+        username:  ${{ secrets.LIQUIBASE_COMMAND_USERNAME }}
+        password: ${{ secrets.LIQUIBASE_COMMAND_PASSWORD }}
+        headless: true
+        logLevel: INFO
+     - uses: liquibase-github-actions/rollback@v4.32.0
+       with:
+        changelogFile: "root-changelog.yaml"
+        tag: ${{ github.event.inputs.tag }}  
+        username:  ${{ secrets.LIQUIBASE_COMMAND_USERNAME }}
+        password: ${{ secrets.LIQUIBASE_COMMAND_PASSWORD }}
+        headless: true
+        logLevel: INFO
