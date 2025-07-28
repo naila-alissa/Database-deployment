@@ -37,7 +37,7 @@ jobs:
           git config user.name "naila-alissa"
           git config user.email "naila.alissa1@inter.ikea.com"
           git add .
-          git commit -m "chore: auto-format SQL files with Liquibase headers"
+          git commit -m "chore: auto-format SQL files with Liquibase headers" || echo "No changes to commit"
           git push origin main
         # env:
         #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
