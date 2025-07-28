@@ -49,9 +49,9 @@ jobs:
       #     echo "$env:GITHUB_WORKSPACE\\liquibase" | Out-File -Append $env:GITHUB_PATH
       #   shell: pwsh
 
-      # - name: Download JDBC Driver
-      #   run: |
-      #     curl -L -o mssql-jdbc.jar https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/12.2.0.jre8/mssql-jdbc-12.2.0.jre8.jar
+      - name: Download JDBC Driver
+        run: |
+          curl -L -o mssql-jdbc.jar https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/12.2.0.jre8/mssql-jdbc-12.2.0.jre8.jar
 
    
 
@@ -67,10 +67,11 @@ jobs:
         uses: liquibase/liquibase-github-action@v7
         with:
           operation: update
-          changeLogFile: changelog.xml  # غيّر هذا حسب اسم ملفك
+          changeLogFile: changelog.xml  
           url: ${{ secrets.LIQUIBASE_COMMAND_URL }}
           username:  ${{ secrets.LIQUIBASE_COMMAND_USERNAME }}
           password: ${{ secrets.LIQUIBASE_COMMAND_PASSWORD }}
+          classpath: mssql-jdbc.jar
 
       - name: Validate changelog
         uses: liquibase/liquibase-github-action@v7
@@ -80,3 +81,4 @@ jobs:
           url: ${{ secrets.LIQUIBASE_COMMAND_URL }}
           username:  ${{ secrets.LIQUIBASE_COMMAND_USERNAME }}
           password: ${{ secrets.LIQUIBASE_COMMAND_PASSWORD }}
+          classpath: mssql-jdbc.jar
