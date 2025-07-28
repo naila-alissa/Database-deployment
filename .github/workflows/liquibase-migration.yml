@@ -28,11 +28,15 @@ jobs:
         run: |
           pwsh ./script/format_liquibase_sql.ps1
         shell: pwsh
+      - name: Add tag file with PowerShell
+        run: |
+          pwsh ./script/add_tag.ps1
+        shell: pwsh
 
       - name: Commit and push formatted SQL files
         run: |
-          git config user.name "naila-alissa"
-          git config user.email "naila.alissa1@inter.ikea.com"
+          git config user.name "${{ secrets.USER_NAME }}"
+          git config user.email "${{ secrets.USER_EMAIL }}"
           git add .
           git commit -m "chore: auto-format SQL files with Liquibase headers" || echo "No changes to commit"
           git push origin main
@@ -86,7 +90,7 @@ jobs:
         uses: liquibase-github-actions/update-sql@v4.32.0
         with:
           operation: update
-          changeLogFile: changelog.xml  
+          changeLogFile: changelog.yml  
           url: ${{ secrets.LIQUIBASE_COMMAND_URL }}
           username:  ${{ secrets.LIQUIBASE_COMMAND_USERNAME }}
           password: ${{ secrets.LIQUIBASE_COMMAND_PASSWORD }}
@@ -95,7 +99,7 @@ jobs:
       - name: Apply Liquibase Changes
         uses: liquibase-github-actions/update@v4.32.0
         with:
-          changeLogFile: changelog.xml  
+          changeLogFile: changelog.yml  
           url: ${{ secrets.LIQUIBASE_COMMAND_URL }}
           username:  ${{ secrets.LIQUIBASE_COMMAND_USERNAME }}
           password: ${{ secrets.LIQUIBASE_COMMAND_PASSWORD }}

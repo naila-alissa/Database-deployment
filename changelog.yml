@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - includeAll:
+      path: script/schema
+      relativeToChangelogFile: true
+  - includeAll:
+      path: script/data
+      relativeToChangelogFile: true
+  - includeAll:
+      path: script/views
+      relativeToChangelogFile: true

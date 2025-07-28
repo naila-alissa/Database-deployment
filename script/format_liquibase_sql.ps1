@@ -21,7 +21,7 @@ foreach ($folder in $folders) {
 
     if (Test-Path $folderPath) {
         $files = Get-ChildItem -Path $folderPath -Filter *.sql -File
-      $globalId = 1
+    #   $globalId = 1
         foreach ($file in $files) {
             $firstLine = (Get-Content $file.FullName -First 1)
 
@@ -29,8 +29,9 @@ foreach ($folder in $folders) {
             if ($firstLine -notlike '--liquibase formatted sql*') {
            
                 $fileName = $file.Name
-                $changeSetId = "$globalId-$folder-$($file.BaseName)"
-                $context = "$folder-$globalId"
+                # $changeSetId = "$globalId-$folder-$($file.BaseName)"
+                $changeSetId = "$folder-$($file.BaseName)"
+                $context = "$folder"
                 $label = $file.BaseName
                 $comment = "Change generated for $fileName in $folder"
 
@@ -83,7 +84,7 @@ foreach ($folder in $folders) {
                 Set-Content -Path $file.FullName -Value "$header$existingContent$rollback"
 
                 Write-Host "Formatted: $file.FullName"
-                $globalId++
+                # $globalId++
             } else {
                 Write-Host "Skipped (already formatted): $file.FullName"
             }

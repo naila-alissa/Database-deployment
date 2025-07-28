@@ -1,0 +1,8 @@
+﻿databaseChangeLog:
+  - changeSet:
+      id: tag-add_column_test-tabel
+      author: naila-alissa
+      changes:
+        - tagDatabase:
+            tag: tag_add_column_test-tabel
+            keepTagOnRollback: true

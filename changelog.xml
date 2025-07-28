@@ -11,7 +11,7 @@
         http://www.liquibase.org/xml/ns/pro
         http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
-    <includeAll path="script/schema/" relativeToChangelogFile="true">  <tagDatabase tag="v1.0" /> </includeAll>
+    <includeAll path="script/schema/" relativeToChangelogFile="true"/>  
     <includeAll path="script/data/" relativeToChangelogFile="true"/>
     <includeAll path="script/views/" relativeToChangelogFile="true"/>
 
