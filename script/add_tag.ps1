@@ -52,7 +52,7 @@
 #     }
 # }
 
-$folders = @("schema", "view", "data")
+$folders = @("schema", "views", "data")
 
 $user = $env:GITHUB_USER
 if ([string]::IsNullOrEmpty($user)) {
