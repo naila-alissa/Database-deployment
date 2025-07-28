@@ -3,14 +3,11 @@
 name: Liquibase Migration
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-  # workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   liquibase-update:
+    name: "Update DB"
     runs-on: ubuntu-latest
 
     steps:
@@ -63,8 +60,30 @@ jobs:
       #   run: |
       #     liquibase update
       #   shell: pwsh
-      - name: Set up Liquibase
-        uses: liquibase/liquibase-github-action@v7
+
+
+      # - name: Set up Liquibase
+      #   uses: liquibase/liquibase-github-action@v7
+      #   with:
+      #     operation: update
+      #     changeLogFile: changelog.xml  
+      #     url: ${{ secrets.LIQUIBASE_COMMAND_URL }}
+      #     username:  ${{ secrets.LIQUIBASE_COMMAND_USERNAME }}
+      #     password: ${{ secrets.LIQUIBASE_COMMAND_PASSWORD }}
+      #     classpath: mssql-jdbc.jar
+
+      # - name: Validate changelog
+      #   uses: liquibase/liquibase-github-action@v7
+      #   with:
+      #     operation: validate
+      #     changeLogFile: changelog.xml
+      #     url: ${{ secrets.LIQUIBASE_COMMAND_URL }}
+      #     username:  ${{ secrets.LIQUIBASE_COMMAND_USERNAME }}
+      #     password: ${{ secrets.LIQUIBASE_COMMAND_PASSWORD }}
+      #     classpath: mssql-jdbc.jar
+      
+      - name: Run Liquibase Update SQL
+        uses: liquibase-github-actions/update-sql@v4.32.0
         with:
           operation: update
           changeLogFile: changelog.xml  
@@ -73,11 +92,10 @@ jobs:
           password: ${{ secrets.LIQUIBASE_COMMAND_PASSWORD }}
           classpath: mssql-jdbc.jar
 
-      - name: Validate changelog
-        uses: liquibase/liquibase-github-action@v7
+      - name: Apply Liquibase Changes
+        uses: liquibase-github-actions/update@v4.32.0
         with:
-          operation: validate
-          changeLogFile: changelog.xml
+          changeLogFile: changelog.xml  
           url: ${{ secrets.LIQUIBASE_COMMAND_URL }}
           username:  ${{ secrets.LIQUIBASE_COMMAND_USERNAME }}
           password: ${{ secrets.LIQUIBASE_COMMAND_PASSWORD }}
