@@ -93,5 +93,34 @@ databaseChangeLog:
             # Write-Host "[x] Skipped Tag File (already exists): $tagYamlPath"
         }
       
+    Get-ChildItem -Path $folder -Filter *.sql | ForEach-Object {
+        $sqlFile = $_.Name
+        $baseName = [System.IO.Path]::GetFileNameWithoutExtension($sqlFile)
+        $safeBaseName = $baseName -replace '[^a-zA-Z0-9_-]', '_'
+        $folderPath = $_.DirectoryName
+
+        # Path for the tag YAML file
+        $tagYamlPath = Join-Path $folderPath "${baseName}_tag.yml"
+
+        # Create tag YAML file if not already exists
+        if (!(Test-Path $tagYamlPath)) {
+            $tagYamlContent = @"
+databaseChangeLog:
+  - changeSet:
+      id: tag-$safeBaseName
+      author: $user
+      changes:
+        - tagDatabase:
+            tag: tag_$safeBaseName
+            keepTagOnRollback: true
+"@
+
+            Set-Content -Path $tagYamlPath -Value $tagYamlContent -Encoding UTF8
+            Write-Host "✅ Created $tagYamlPath"
+        } else {
+            Write-Host "⚠️ Skipped existing $tagYamlPath"
+        }
+    }
+   
     }   
 }
