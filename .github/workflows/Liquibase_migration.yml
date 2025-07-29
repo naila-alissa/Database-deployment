@@ -27,7 +27,7 @@ jobs:
 
       - name: Commit and push formatted SQL files
         run: |
-          git config user.name "${{ secrets.USER_NAME }}"
+          git config user.name "${{ github.actor }}"
           git config user.email "${{ secrets.USER_EMAIL }}"
           git add .
           git commit -m "chore: auto-format SQL files with Liquibase headers" || echo "No changes to commit"
