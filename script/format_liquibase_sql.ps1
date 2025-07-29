@@ -87,7 +87,7 @@ databaseChangeLog:
             Set-Content -Path $tagYamlPath -Value $tagYamlContent -Encoding UTF8
             Write-Host "[OK] Created Tag File: $tagYamlPath"
         } else {
-            Write-Host "[SKIP] Tag File Already Exists: $tagYamlPath"
+            # Write-Host "[SKIP] Tag File Already Exists: $tagYamlPath"
         }
-    }
+    } Write-Host "Formated Already Exists $folder "
 }
