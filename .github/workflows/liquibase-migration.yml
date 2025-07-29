@@ -19,16 +19,13 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Format SQL files with PowerShell
+      - name: Format SQL files and create tag file with PowerShell
         env:
           GITHUB_USER: ${{ github.actor }}
         run: |
           pwsh ./script/format_liquibase_sql.ps1
         shell: pwsh
-      - name: Add tag file with PowerShell
-        run: |
-          pwsh ./script/add_tag.ps1
-        shell: pwsh
+     
 
       - name: Commit and push formatted SQL files
         run: |

@@ -1,0 +1,8 @@
+﻿databaseChangeLog:
+  - changeSet:
+      id: tag-9_insert
+      author: naila-alissa
+      changes:
+        - tagDatabase:
+            tag: tag_9_insert
+            keepTagOnRollback: true
