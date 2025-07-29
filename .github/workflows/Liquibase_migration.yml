@@ -1,0 +1,49 @@
+name: Liquibase Migration
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  liquibase-update:
+    name: "Update DB"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Format SQL files and create tag file with PowerShell
+        env:
+          GITHUB_USER: ${{ github.actor }}
+        run: |
+          pwsh ./script/format_liquibase_sql.ps1
+        shell: pwsh
+     
+
+      - name: Commit and push formatted SQL files
+        run: |
+          git config user.name "${{ secrets.USER_NAME }}"
+          git config user.email "${{ secrets.USER_EMAIL }}"
+          git add .
+          git commit -m "chore: auto-format SQL files with Liquibase headers" || echo "No changes to commit"
+          git push origin main
+         
+
+      - name: Download JDBC Driver
+        run: |
+          curl -L -o mssql-jdbc.jar https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/12.2.0.jre8/mssql-jdbc-12.2.0.jre8.jar
+      
+      - name: Run Liquibase Update SQL
+        uses: liquibase-github-actions/update-sql@v4.32.0
+        with:
+          operation: update
+          changeLogFile: changelog.yml  
+          url: ${{ secrets.LIQUIBASE_COMMAND_URL }}
+          username:  ${{ secrets.LIQUIBASE_COMMAND_USERNAME }}
+          password: ${{ secrets.LIQUIBASE_COMMAND_PASSWORD }}
+          # classpath: mssql-jdbc.jar
