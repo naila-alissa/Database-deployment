@@ -1,6 +1,5 @@
-
-
-# Add Liquiabase Tags to SQL Files and Create YAML Tag Files
+# Define the root path relative to the script location
+$rootPath = Split-Path -Parent $MyInvocation.MyCommand.Path
 $folders = @("schema", "views", "data")
 
 # Get author name
@@ -15,12 +14,14 @@ if ([string]::IsNullOrEmpty($user)) {
 }
 
 foreach ($folder in $folders) {
-    if (!(Test-Path $folder)) {
+    $fullFolderPath = Join-Path $rootPath $folder
+
+    if (!(Test-Path $fullFolderPath)) {
         Write-Warning "Folder not found: $folder"
         continue
     }
 
-    $files = Get-ChildItem -Path $folder -Filter *.sql -File
+    $files = Get-ChildItem -Path $fullFolderPath -Filter *.sql -File
 
     foreach ($file in $files) {
         $folderPath = $file.DirectoryName
@@ -35,7 +36,6 @@ foreach ($folder in $folders) {
             $changeSetId = "$folder-$baseName"
             $context = $folder
             $label = $baseName
-            # $comment = "Change generated for $baseName in $folder"
 
             $header = @"
 --liquibase formatted sql
@@ -53,8 +53,7 @@ foreach ($folder in $folders) {
                     $objectName = $matches[1]
                     $rollback = "--rollback: DROP TABLE $objectName;"
                     break
-                }
-                elseif ($line -match 'CREATE\s+VIEW\s+([^\s\(]+)') {
+                } elseif ($line -match 'CREATE\s+VIEW\s+([^\s\(]+)') {
                     $objectName = $matches[1]
                     $rollback = "--rollback: DROP VIEW $objectName;"
                     break
@@ -69,40 +68,10 @@ foreach ($folder in $folders) {
 
             $existingContent = $contentLines -join "`n"
             Set-Content -Path $file.FullName -Value "$header$existingContent$rollback"
-
             Write-Host "[OK] Formatted SQL file: $($file.FullName)"
-        } else {
-            # Write-Host "[x] Skipped (already formatted): $($file.FullName)"
-        } 
+        }
 
         ### --- PART 2: Create YAML Tag File ---
-        if (!(Test-Path $tagYamlPath)) {
-$tagYamlContent = @"
-databaseChangeLog:
-  - changeSet:
-      id: tag-$safeBaseName
-      author: $user
-      changes:
-        - tagDatabase:
-            tag: tag_$safeBaseName
-            keepTagOnRollback: true
-"@
-            Set-Content -Path $tagYamlPath -Value $tagYamlContent -Encoding UTF8
-            Write-Host "[OK] Created Tag File: $tagYamlPath"
-        } else {
-            # Write-Host "[x] Skipped Tag File (already exists): $tagYamlPath"
-        }
-      
-    Get-ChildItem -Path $folder -Filter *.sql | ForEach-Object {
-        $sqlFile = $_.Name
-        $baseName = [System.IO.Path]::GetFileNameWithoutExtension($sqlFile)
-        $safeBaseName = $baseName -replace '[^a-zA-Z0-9_-]', '_'
-        $folderPath = $_.DirectoryName
-
-        # Path for the tag YAML file
-        $tagYamlPath = Join-Path $folderPath "${baseName}_tag.yml"
-
-        # Create tag YAML file if not already exists
         if (!(Test-Path $tagYamlPath)) {
             $tagYamlContent = @"
 databaseChangeLog:
@@ -116,11 +85,9 @@ databaseChangeLog:
 "@
 
             Set-Content -Path $tagYamlPath -Value $tagYamlContent -Encoding UTF8
-            Write-Host "✅ Created $tagYamlPath"
+            Write-Host "[OK] Created Tag File: $tagYamlPath"
         } else {
-            Write-Host "⚠️ Skipped existing $tagYamlPath"
+            Write-Host "[SKIP] Tag File Already Exists: $tagYamlPath"
         }
     }
-   
-    }   
 }
