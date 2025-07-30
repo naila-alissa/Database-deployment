@@ -76,7 +76,7 @@ foreach ($folder in $folders) {
             $tagYamlContent = @"
 databaseChangeLog:
   - changeSet:
-      id: tag-$safeBaseName
+      id: $changeSetId
       author: $user
       changes:
         - tagDatabase:
