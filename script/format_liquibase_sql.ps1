@@ -61,7 +61,7 @@ foreach ($folder in $folders) {
             }
 
             if (-not $rollback) {
-                $rollback = "--rollback: ROLLBACK $baseName"
+                # $rollback = "--rollback:  $baseName"
             }
 
             $rollback = "`n$rollback`n"
