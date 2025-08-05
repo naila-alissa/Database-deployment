@@ -51,11 +51,11 @@ foreach ($folder in $folders) {
             foreach ($line in $contentLines) {
                 if ($line -match 'CREATE\s+TABLE\s+([^\s\(]+)') {
                     $objectName = $matches[1]
-                    $rollback = "--rollback: DROP TABLE $objectName;"
+                    $rollback = "--rollback DROP TABLE $objectName;"
                     break
                 } elseif ($line -match 'CREATE\s+VIEW\s+([^\s\(]+)') {
                     $objectName = $matches[1]
-                    $rollback = "--rollback: DROP VIEW $objectName;"
+                    $rollback = "--rollback DROP VIEW $objectName;"
                     break
                 }
             }
