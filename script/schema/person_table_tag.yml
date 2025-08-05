@@ -1,8 +1,8 @@
 ﻿databaseChangeLog:
   - changeSet:
-      id: tag-insert-testtabel
+      id: schema-person_table
       author: naila-alissa
       changes:
         - tagDatabase:
-            tag: tag_insert-testtabel
+            tag: tag_person_table
             keepTagOnRollback: true

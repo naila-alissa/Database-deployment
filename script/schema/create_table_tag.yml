@@ -1,8 +1,0 @@
-﻿databaseChangeLog:
-  - changeSet:
-      id: tag-create_table
-      author: naila-alissa
-      changes:
-        - tagDatabase:
-            tag: tag_create_table
-            keepTagOnRollback: true

@@ -1,8 +1,0 @@
-﻿databaseChangeLog:
-  - changeSet:
-      id: tag-add_newcolumn
-      author: naila-alissa
-      changes:
-        - tagDatabase:
-            tag: tag_add_newcolumn
-            keepTagOnRollback: true

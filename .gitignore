@@ -1,0 +1,4 @@
+# Ignore Liquibase and JDBC files
+liquibase.properties
+mssql-jdbc.jar
+mssql-jdbc_auth.dll
