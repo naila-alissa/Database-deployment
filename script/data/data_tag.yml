@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: data-data
+      author: naila-alissa
+      changes:
+        - tagDatabase:
+            tag: tag_data
+            keepTagOnRollback: true
