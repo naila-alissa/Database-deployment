@@ -1,8 +1,0 @@
-﻿databaseChangeLog:
-  - changeSet:
-      id: schema-person1_table
-      author: naila-alissa
-      changes:
-        - tagDatabase:
-            tag: tag_person1_table
-            keepTagOnRollback: true

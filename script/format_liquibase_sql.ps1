@@ -1,3 +1,4 @@
+
 # Define the root path relative to the script location
 $rootPath = Split-Path -Parent $MyInvocation.MyCommand.Path
 $folders = @("schema", "views", "data")
